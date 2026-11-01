@@ -1,0 +1,7 @@
+node_modules/
+dist/
+out/
+release/
+desktop/build/bin/
+desktop/src/renderer/public/mediapipe/
+out-smoke/

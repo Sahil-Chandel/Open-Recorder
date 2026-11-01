@@ -1,0 +1,10 @@
+{
+  "extends": "../tsconfig.base.json",
+  "compilerOptions": {
+    "types": ["vite/client"],
+    "lib": ["ES2023", "DOM", "DOM.Iterable"],
+    "baseUrl": ".",
+    "paths": { "@rec/shared": ["../shared/src/index.ts"], "@rec/shared/*": ["../shared/src/*"], "@/*": ["src/renderer/src/*"] }
+  },
+  "include": ["src/renderer/**/*", "src/shared/**/*", "src/preload/api.d.ts", "test/renderer/**/*"]
+}

@@ -1,0 +1,61 @@
+@import "tailwindcss";
+
+/* Design tokens (task 0.5). Dark-first; light theme via [data-theme="light"]. */
+@theme {
+  --color-bg: #0e0e13;
+  --color-panel: #16161d;
+  --color-panel-2: #1d1d26;
+  --color-line: #2a2a36;
+  --color-text: #ececf2;
+  --color-muted: #9898a8;
+  --color-accent: #7c5cff;
+  --color-accent-2: #a18bff;
+  --color-danger: #ef4444;
+  --color-ok: #22c55e;
+  --color-warn: #f59e0b;
+  --color-zoom: #3b82f6;
+  --color-layout: #14b8a6;
+  --color-ann: #f97316;
+  --color-cap: #eab308;
+  --radius-ui: 10px;
+  --font-sans: "Inter", "Segoe UI", system-ui, -apple-system, sans-serif;
+}
+
+[data-theme="light"] {
+  --color-bg: #f6f6f9;
+  --color-panel: #ffffff;
+  --color-panel-2: #f0f0f5;
+  --color-line: #dedee6;
+  --color-text: #17171f;
+  --color-muted: #666675;
+}
+
+html, body, #root { height: 100%; margin: 0; }
+body {
+  background: var(--color-bg);
+  color: var(--color-text);
+  font-family: var(--font-sans);
+  font-size: 13px;
+  -webkit-font-smoothing: antialiased;
+  user-select: none;
+  overflow: hidden;
+}
+body.transparent { background: transparent; }
+input, textarea, select { user-select: text; }
+.drag { -webkit-app-region: drag; }
+.no-drag { -webkit-app-region: no-drag; }
+::-webkit-scrollbar { width: 8px; height: 8px; }
+::-webkit-scrollbar-thumb { background: var(--color-line); border-radius: 8px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-corner { background: transparent; }
+/* rails / strips that may scroll on short windows but should not show a gutter */
+.scrollbar-none { scrollbar-width: none; }
+.scrollbar-none::-webkit-scrollbar { display: none; }
+:focus-visible { outline: 2px solid var(--color-accent); outline-offset: 1px; }
+input[type="range"] { accent-color: var(--color-accent); }
+.checker {
+  background-image: linear-gradient(45deg, #2a2a33 25%, transparent 25%), linear-gradient(-45deg, #2a2a33 25%, transparent 25%),
+    linear-gradient(45deg, transparent 75%, #2a2a33 75%), linear-gradient(-45deg, transparent 75%, #2a2a33 75%);
+  background-size: 16px 16px;
+  background-position: 0 0, 0 8px, 8px -8px, -8px 0;
+}

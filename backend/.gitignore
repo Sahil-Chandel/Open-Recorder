@@ -1,0 +1,6 @@
+node_modules/
+data/
+.test-data/
+.env
+# Swift build output (macOS helper)
+.build/

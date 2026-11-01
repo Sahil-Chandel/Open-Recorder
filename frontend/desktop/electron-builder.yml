@@ -1,0 +1,70 @@
+# Packaging (task 14.1–14.3): Windows NSIS installer (x64), macOS DMGs (Apple Silicon + Intel).
+# scripts/prepare-bin.mjs puts the native capture helper + ffmpeg in build/bin/<platform>-<arch>; they ship
+# in resources/bin/<platform>-<arch>, outside the asar.
+appId: app.open-recorder.desktop
+# exact version of the Electron in node_modules (electron-builder needs a pinned version, not a range)
+electronVersion: 45.1.0
+productName: Open-Recorder
+# The app's name at runtime comes from the packaged package.json, and it decides the data folder
+# (%APPDATA%\Open-Recorder, ~/Library/Application Support/Open-Recorder) and the single-instance lock. Without
+# this it is "desktop" — the same as `npm run dev` — so a running dev build made the installed app quit at launch.
+extraMetadata:
+  productName: Open-Recorder
+copyright: Copyright © 2026 Open-Recorder contributors
+directories:
+  output: release
+  buildResources: build
+files:
+  - out/**
+  - package.json
+extraResources:
+  - from: build/bin/${platform}-${arch}
+    to: bin/${platform}-${arch}
+    filter: ["**/*"]
+  - from: build/legal
+    to: legal
+asarUnpack:
+  - "**/*.node"
+fileAssociations:
+  - ext: recproj
+    name: Open-Recorder project
+    role: Editor
+win:
+  target:
+    - target: nsis
+      arch: [x64]
+  icon: build/icon.png
+  # Unsigned by default (Windows SmartScreen shows "More info → Run anyway"). To sign, set CSC_LINK /
+  # CSC_KEY_PASSWORD to an OV/EV code-signing certificate in CI.
+  signtoolOptions:
+    publisherName: Open-Recorder
+nsis:
+  oneClick: false
+  perMachine: false
+  allowToChangeInstallationDirectory: true
+  createDesktopShortcut: true
+  createStartMenuShortcut: true
+  shortcutName: Open-Recorder
+  artifactName: ${productName}-Setup-${version}.${ext}
+mac:
+  target:
+    - target: dmg
+      arch: [arm64, x64]
+  icon: build/icon.png
+  category: public.app-category.video
+  hardenedRuntime: true
+  gatekeeperAssess: false
+  entitlements: build/entitlements.mac.plist
+  entitlementsInherit: build/entitlements.mac.plist
+  extendInfo:
+    NSCameraUsageDescription: Record your webcam as a separate layer you can style in the editor.
+    NSMicrophoneUsageDescription: Record your voice for narration and captions.
+    NSScreenCaptureUsageDescription: Record your screen.
+  # Unsigned by default (first launch: right-click → Open). To sign + notarize, provide CSC_LINK and
+  # APPLE_ID / APPLE_APP_SPECIFIC_PASSWORD / APPLE_TEAM_ID and set notarize: true.
+  notarize: false
+dmg:
+  artifactName: ${productName}-${version}-${arch}.${ext}
+# No update feed: new versions are published on the project's releases page. To enable in-app updates,
+# switch to `provider: github` with your owner/repo.
+publish: null
